@@ -93,7 +93,7 @@ class RequestHandler {
         }
 
         // headers
-        await this.getHeader(withToken, {}).then(data => {
+        await this.getHeader(withToken, {}, req).then(data => {
             req.headers = JSON.parse(data);
         });
 
@@ -127,7 +127,7 @@ class RequestHandler {
      * @param opt 自定义header
      * @returns {{t: *, sign_method: *, sign: *, client_id: *}}
      */
-     static async getHeader(withToken, opt) {
+     static async getHeader(withToken, opt, req) {
         let headers = {
             client_id: global.accessId,
             t: new Date().getTime(),
@@ -136,9 +136,9 @@ class RequestHandler {
 
         if (withToken) {
             headers.access_token = await TokenCache.getToken();
-            headers.sign = this.calcSign(global.accessId, global.accessKey, headers.t, headers.access_token, true);
+            headers.sign = this.calcSign(global.accessId, global.accessKey, headers.t, headers.access_token, true, req, headers);
         } else {
-            headers.sign = this.calcSign(global.accessId, global.accessKey, headers.t, null, false);
+            headers.sign = this.calcSign(global.accessId, global.accessKey, headers.t, null, false, req, headers);
         }
 
         Object.assign(headers, opt);
@@ -157,12 +157,25 @@ class RequestHandler {
      * @param withToken
      * @returns {string}
      */
-    static calcSign(accessId, secret, t, accessToken, withToken) {
+    static calcSign(accessId, secret, t, accessToken, withToken, req, headers) {
         let message = accessId + t;
         if (withToken) {
             message = accessId + accessToken + t;
         }
 
+        // update the payload to include it's data if running the new signing algorithm (post 30.6.2021)
+        if (global.new_sign_algorithm) {
+            if (!req || ! headers) console.error('new_sign_algorithm needs parameter req and header to be set to calculate signature')
+            else {
+                const signValues = []
+                const signHeaders = headers['Signature-Headers'] || ''
+                signHeaders.split(':').forEach(key => key && signValues.push(key))
+                message += `${req.method}\n` + //HTTPMethod
+                    `${Sign.hashSHA256(req.form || '')}\n` + // Content-SHA256
+                    `${signValues.join('')}\n` + // Headers
+                    `${req.path || ''}`
+            }
+        }
         return Sign.encrytSHA256(message, secret);
     }
 

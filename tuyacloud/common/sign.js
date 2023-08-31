@@ -25,6 +25,10 @@ class SignUtil {
 
         return result;
     }
+
+    static hashSHA256(message) {
+        crypto.createHash('sha256').update(message).digest('hex')
+    }
 }
 
 module.exports = SignUtil;

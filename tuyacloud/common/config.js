@@ -14,7 +14,7 @@ class Config {
      * @param accessKey
      * @param endpoint
      */
-    static init(accessId, accessKey, endpoint) {
+    static init(accessId, accessKey, endpoint, new_sign_algorithm) {
         if (accessId === "" || accessKey === "" || !(endpoint instanceof Region)) {
             throw new TuyaCloudSDKException("开发者信息有误！");
         }
@@ -22,6 +22,7 @@ class Config {
         global.accessId = accessId;
         global.accessKey = accessKey;
         global.endpoint = endpoint.getUrl();
+        global.new_sign_algorithm = new_sign_algorithm
     }
 }
 
