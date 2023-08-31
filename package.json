@@ -18,13 +18,19 @@
   "dependencies": {
     "async-await-retry": "^1.0.4"
   },
+  "author": {
+    "name": "tuyacloudapi, Peter Simeonov"
+  },
   "directories": {
     "example": "examples",
     "lib": "lib"
   },
+  "bugs": {
+    "url": "https://github.com/simeonovp/xmeye-js-lib/issues"
+  },
+  "homepage": "https://github.com/simeonovp/simeonovp/tuya_cloud_sdk_nodejs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/simeonovp/node-red-contrib-tasmotas.git"
-  },
-  "author": "tuyacloudapi, Peter Simeonov"
+    "url": "https://github.com/simeonovp/tuya_cloud_sdk_nodejs.git"
+  }
 }
