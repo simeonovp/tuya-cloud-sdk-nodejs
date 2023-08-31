@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://registry.code.tuya-inc.top/shengjun.zhang/tuya_cloud_sdk_nodejs"
+    "url": "git+https://github.com/simeonovp/node-red-contrib-tasmotas.git"
   },
-  "author": "tuyacloudapi"
+  "author": "tuyacloudapi, Peter Simeonov"
 }
