@@ -1,5 +1,5 @@
 {
-  "name": "tuya_cloud_sdk_nodejs",
+  "name": "tuya_cloud_sdk_nodejs_ex",
   "version": "1.1.0",
   "description": "涂鸦云 API NODEJS SDK",
   "main": "index.js",
@@ -26,11 +26,11 @@
     "lib": "lib"
   },
   "bugs": {
-    "url": "https://github.com/simeonovp/xmeye-js-lib/issues"
+    "url": "https://github.com/simeonovp/tuya_cloud_sdk_nodejs_ex/issues"
   },
-  "homepage": "https://github.com/simeonovp/simeonovp/tuya_cloud_sdk_nodejs",
+  "homepage": "https://github.com/simeonovp/simeonovp/tuya_cloud_sdk_nodejs_ex",
   "repository": {
     "type": "git",
-    "url": "https://github.com/simeonovp/tuya_cloud_sdk_nodejs.git"
+    "url": "https://github.com/simeonovp/tuya_cloud_sdk_nodejs_ex.git"
   }
 }

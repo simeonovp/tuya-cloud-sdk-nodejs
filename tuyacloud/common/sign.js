@@ -27,7 +27,7 @@ class SignUtil {
     }
 
     static hashSHA256(message) {
-        crypto.createHash('sha256').update(message).digest('hex')
+        return crypto.createHash('sha256').update(message).digest('hex')
     }
 }
 
