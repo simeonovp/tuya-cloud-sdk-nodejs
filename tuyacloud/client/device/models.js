@@ -1,4 +1,5 @@
 const ApiRequest = require("../../common/api_request");
+const ApiFileRequest = require("../../common/api_file_request");
 const ApiRequestBody = require("../../common/api_request_body");
 const HttpMethod = require("../../common/http_method");
 
@@ -298,6 +299,43 @@ class getDeviceMultipleNameReq extends ApiRequest {
     }
 }
 
+//sip
+class GetDeviceListByUidReq extends ApiRequest {
+    constructor(userId, last_row_key) {
+        super()
+        this.query = { page_size:'75', source_type: 'tuyaUser', source_id: userId }
+        if (last_row_key) this.query['last_row_key'] = data.result.last_row_key
+    }
+
+    getRequestUrl() {
+        return '/v1.3/iot-03/devices' // `/v1.0/iot-01/associated-users/devices`
+    }
+
+    getRequestMethod() {
+        return HttpMethod.GET
+    }
+
+    getRequestQuery() {
+        return this.query
+    }
+}
+
+class GetFileReq extends ApiFileRequest {
+    constructor(url, stream) {
+        super()
+        this.url = url
+        this.stream = stream
+    }
+
+    getRequestUrl() {
+        return this.url
+    }
+
+    getOutStream() {
+        return this.stream
+    }
+}
+
 module.exports = {
     GetDeviceReq: GetDeviceReq,
     GetDeviceFunctionsReq: GetDeviceFunctionsReq,
@@ -312,5 +350,7 @@ module.exports = {
     GetDevicesFactoryInfoReq: GetDevicesFactoryInfoReq,
     UpdateDeviceNameReq: UpdateDeviceNameReq,
     UpdateDeviceMultipleNameReq: UpdateDeviceMultipleNameReq,
-    getDeviceMultipleNameReq: getDeviceMultipleNameReq
+    getDeviceMultipleNameReq: getDeviceMultipleNameReq,
+    GetDeviceListByUidReq,
+    GetFileReq,
 };

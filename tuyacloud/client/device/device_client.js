@@ -85,8 +85,8 @@ class DeviceClient {
      * @param uid
      * @param callback
      */
-    static getDeviceListByUid(uid, callback) {
-        RequestHandler.sendRequestWithToken(new Models.GetDeviceListByUidReq(uid), callback);
+    static getDeviceListByUid(uid, last_row_key, callback) {
+        RequestHandler.sendRequestWithToken(new Models.GetDeviceListByUidReq(uid, last_row_key), callback);
     }
 
     /**
@@ -108,6 +108,11 @@ class DeviceClient {
     static getDevicesByToken(token, callback) {
         RequestHandler.sendRequestWithToken(new Models.GetDevicesByTokenReq(token), callback);
     }
+
+    static getDevicesIcon(url, stream, callback) {
+        RequestHandler.sendRequestWithToken(new Models.GetFileReq(url, stream), callback);
+    }
+
 }
 
 module.exports = DeviceClient;

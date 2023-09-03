@@ -15,11 +15,15 @@ class HttpConnection {
     static doRequest(req, callback, opt={}) {
         Object.assign(req, opt);
         console.log(JSON.stringify(req))
-        let resp = https.request(req, function(res){
-            res.on('data', function(data){
-                callback(null, data);
-            });
-        }).on('error', function(err){
+        let resp = https.request(req, function(res) {
+            let data = ''
+            res.on('data', (chunk) => {
+                data = data + chunk.toString();
+            })
+            res.on('end', () => {
+                callback(null, data)
+            })
+         }).on('error', function(err){
             callback(err, null);
         });
 
@@ -28,6 +32,17 @@ class HttpConnection {
         }
 
         resp.end();
+    }
+
+    static doFileRequest(req, stream, callback, opt={}) {
+        https.get(req, response => {
+            response.pipe(stream);
+            stream.on('finish', () => {
+                callback(null, stream)
+            })
+        }).on('error', err => {
+            callback(err, null)
+        })
     }
 }
 module.exports = HttpConnection;

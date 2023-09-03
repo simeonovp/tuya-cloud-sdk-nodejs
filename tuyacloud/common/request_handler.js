@@ -1,6 +1,7 @@
 const TuyaCloudSDKException = require("../exception/tuya_cloud_sdk_exception");
 const ApiRequestBody = require("./api_request_body");
 const ApiRequest = require("./api_request");
+const ApiFileRequest = require("./api_file_request");
 const HttpConnection = require("./http_connection");
 const ErrorCode = require("./error_code");
 const TokenCache = require("./token_cache");
@@ -67,7 +68,7 @@ class RequestHandler {
         }
 
         // 验证请求参数
-        let method, url;
+        let method, url, stream;
         if (request instanceof ApiRequest) {
             method = request.getRequestMethod();
             if (!(method instanceof HttpMethod)) {
@@ -75,6 +76,37 @@ class RequestHandler {
             }
             method = method.getName();
             url = request.getRequestUrl();
+
+            let query = request.getRequestQuery && request.getRequestQuery()
+            if (query) {
+                // note: signature must be calculated before URL-encoding!
+                if (typeof query === 'string') {
+                  // if it's a string then assume no url-encoding is needed
+                  url += query.startsWith('?') && query || ('?' + query)
+                }
+                else {
+                  // object keys are unsorted, however Tuya requires the keys to be in alphabetical order for signing
+                  // as per https://developer.tuya.com/en/docs/iot/singnature?id=Ka43a5mtx1gsc
+                  if (typeof query === 'object') {
+                    const sortObject = (obj) => {
+                      return Object.keys(obj).sort().reduce((result, key) => {
+                        result[key] = obj[key]
+                        return result
+                      }, {})
+                    }
+                    query = sortObject(query)
+                    // calculate signature without url-encoding
+                    const entries = []
+                    Object.entries(query).forEach(([key, val]) => entries.push(`${key}=${val}`))
+                    url += '?' + entries.join('&')
+                  }
+                }
+            }
+        }
+        else if (request instanceof ApiFileRequest) {
+            method = 'GET'
+            url = request.getRequestUrl()
+            stream = request.getOutStream()
         }
 
         if (method == undefined || url == undefined) {
@@ -93,7 +125,8 @@ class RequestHandler {
         }
 
         // headers
-        await this.getHeader(withToken, {}, req).then(data => {
+        const opt = (request instanceof ApiRequestBody) && request.getRequestOpt && request.getRequestOpt() || {}
+        await this.getHeader(withToken, opt, req).then(data => {
             req.headers = JSON.parse(data);
         });
 
@@ -102,22 +135,36 @@ class RequestHandler {
         }
 
         return new Promise((resolve, reject) => {
-            HttpConnection.doRequest(req, async(error, data) => {
-                if (error) {
-                    const tcError = new TuyaCloudSDKException(error.message);
-                    await callback(tcError, null);
-                } else {
-                    data = JSON.parse(data);
-                    if (!data.success) {
-                        const tcError = new TuyaCloudSDKException(data.code, ErrorCode.getError(data.code));
+            if (request instanceof ApiRequest) {
+                HttpConnection.doRequest(req, async(error, data) => {
+                    if (error) {
+                        const tcError = new TuyaCloudSDKException(error.message);
                         await callback(tcError, null);
                     } else {
-                        await callback(null, data);
-                        resolve(data);
+                        data = JSON.parse(data);
+                        if (!data.success) {
+                            const tcError = new TuyaCloudSDKException(data.code, ErrorCode.getError(data.code));
+                            await callback(tcError, null);
+                        } else {
+                            await callback(null, data);
+                            resolve(data);
+                        }
                     }
-                }
-            }, {timeout: 30000});
-        });
+                }, {timeout: 30000});
+            }
+            else  if (request instanceof ApiFileRequest) {
+                //https://support.tuya.com/en/help/_detail/K9g77ztjza6uj
+                req.host = req.host.replace('openapi.', 'images.')
+                HttpConnection.doFileRequest(req, stream, async(error, data) => {
+                    if (error) {
+                        const tcError = new TuyaCloudSDKException(error.message);
+                        await callback(tcError, null);
+                    } else {
+                        resolve(data)
+                    }
+            }, {timeout: 30000})
+        }
+    });
     }
 
     /**
