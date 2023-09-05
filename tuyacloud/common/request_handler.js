@@ -141,7 +141,13 @@ class RequestHandler {
                         const tcError = new TuyaCloudSDKException(error.message);
                         await callback(tcError, null);
                     } else {
-                        data = JSON.parse(data);
+                        try {
+                            data = JSON.parse(data);
+                        } catch (err) {
+                            const tcError = new TuyaCloudSDKException(err)
+                            await callback(tcError, null)
+                            reject(err)
+                        }
                         if (!data.success) {
                             const tcError = new TuyaCloudSDKException(data.code, ErrorCode.getError(data.code));
                             await callback(tcError, null);

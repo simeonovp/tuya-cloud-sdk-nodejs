@@ -59,8 +59,12 @@ class DeviceControlClient {
      *
      * @param deviceId
      */
-    static getDeviceSpecificationsReq(deviceId, callback){
+    static getDeviceSpecifications(deviceId, callback){
         RequestHandler.sendRequestWithToken(new Models.GetDeviceSpecificationsReq(deviceId), callback)
+    }
+
+    static getDeviceProperties(deviceId, callback){
+        RequestHandler.sendRequestWithToken(new Models.GetDevicePropertiesReq(deviceId), callback)
     }
 }
 

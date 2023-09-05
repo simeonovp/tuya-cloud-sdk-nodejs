@@ -320,6 +320,26 @@ class GetDeviceListByUidReq extends ApiRequest {
     }
 }
 
+class getDeviceDataModelReq extends ApiRequest {
+    constructor(deviceId) {
+        super();
+        this.deviceId = deviceId
+    }
+
+
+    getRequestMethod() {
+        return HttpMethod.GET;
+    }
+
+    getRequestUrl() {
+        return `v2.0/cloud/thing/${this.deviceId}/model`
+    }
+
+    getRequestOpt() {
+        return { mode: 'cors', 'Content-Type': 'application/json' }
+    }
+}
+
 class GetFileReq extends ApiFileRequest {
     constructor(url, stream) {
         super()
@@ -352,5 +372,6 @@ module.exports = {
     UpdateDeviceMultipleNameReq: UpdateDeviceMultipleNameReq,
     getDeviceMultipleNameReq: getDeviceMultipleNameReq,
     GetDeviceListByUidReq,
+    getDeviceDataModelReq,
     GetFileReq,
 };

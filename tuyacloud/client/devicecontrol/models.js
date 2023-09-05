@@ -117,7 +117,22 @@ class GetDeviceSpecificationsReq extends ApiRequest{
     }
 
     getRequestUrl() {
-        return `/v1.0/devices/${this.deviceId}/specifications`;
+        return `/v1.1/devices/${this.deviceId}/specifications`
+    }
+}
+
+class GetDevicePropertiesReq extends ApiRequest{
+    constructor(deviceId){
+        super();
+        this.deviceId = deviceId
+    }
+
+    getRequestMethod() {
+        return HttpMethod.GET;
+    }
+
+    getRequestUrl() {
+        return `/v2.0/cloud/thing/${this.deviceId}/shadow/properties`
     }
 }
 
@@ -127,5 +142,6 @@ module.exports = {
     GetDeviceListReq: GetDeviceListReq,
     PostDeviceCommandReq: PostDeviceCommandReq,
     GetDeviceFunctionsReq: GetDeviceFunctionsReq,
-    GetDeviceSpecificationsReq: GetDeviceSpecificationsReq
+    GetDeviceSpecificationsReq: GetDeviceSpecificationsReq,
+    GetDevicePropertiesReq,
 };
