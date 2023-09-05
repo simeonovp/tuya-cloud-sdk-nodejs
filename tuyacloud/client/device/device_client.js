@@ -109,10 +109,6 @@ class DeviceClient {
         RequestHandler.sendRequestWithToken(new Models.GetDevicesByTokenReq(token), callback);
     }
 
-    static getDeviceDataModel(uid, callback) {
-        RequestHandler.sendRequest(new Models.getDeviceDataModelReq(uid), callback);
-    }
-
     static getDevicesIcon(url, stream, callback) {
         RequestHandler.sendRequestWithToken(new Models.GetFileReq(url, stream), callback);
     }

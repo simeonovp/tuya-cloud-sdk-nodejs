@@ -66,6 +66,10 @@ class DeviceControlClient {
     static getDeviceProperties(deviceId, callback){
         RequestHandler.sendRequestWithToken(new Models.GetDevicePropertiesReq(deviceId), callback)
     }
+
+    static getDeviceDataModel(deviceId, callback) {
+        RequestHandler.sendRequestWithToken(new Models.GetDeviceDataModelReq(deviceId), callback)
+    }
 }
 
 module.exports = DeviceControlClient;
