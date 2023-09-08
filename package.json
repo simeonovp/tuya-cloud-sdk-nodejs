@@ -1,7 +1,7 @@
 {
   "name": "tuya-cloud-sdk-nodejs-ex",
   "version": "1.1.0",
-  "description": "涂鸦云 API NODEJS SDK",
+  "description": "Tuya API NODEJS SDK",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,19 +18,25 @@
   "dependencies": {
     "async-await-retry": "^1.0.4"
   },
-  "author": {
-    "name": "tuyacloudapi, Peter Simeonov"
-  },
+  "author": "tuyacloudapi, Peter Simeonov",
   "directories": {
-    "example": "examples",
-    "lib": "lib"
+    "example": "example"
   },
   "bugs": {
     "url": "https://github.com/simeonovp/tuya-cloud-sdk-nodejs-ex/issues"
   },
-  "homepage": "https://github.com/simeonovp/simeonovp/tuya-cloud-sdk-nodejs-ex",
+  "homepage": "https://github.com/simeonovp/tuya-cloud-sdk-nodejs-ex",
   "repository": {
     "type": "git",
-    "url": "https://github.com/simeonovp/tuya-cloud-sdk-nodejs-ex.git"
-  }
+    "url": "git+https://github.com/simeonovp/tuya-cloud-sdk-nodejs-ex.git"
+  },
+  "files": [
+    "package.json",
+    "README.md",
+    "LICENSE",
+    "img/*",
+    "tuyacloud/*",
+    "example/*"
+  ],
+  "license": "MIT"
 }
