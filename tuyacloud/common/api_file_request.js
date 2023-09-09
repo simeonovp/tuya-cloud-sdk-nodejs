@@ -1,4 +1,4 @@
-const TuyaCloudSDKException = require("tuya_cloud_sdk_nodejs/tuyacloud/exception/tuya_cloud_sdk_exception");
+const TuyaCloudSDKException = require("../exception/tuya_cloud_sdk_exception");
 
 class ApiFileRequest {
 
