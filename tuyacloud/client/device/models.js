@@ -304,7 +304,7 @@ class GetDeviceListByUidReq extends ApiRequest {
     constructor(userId, last_row_key) {
         super()
         this.query = { page_size:'75', source_type: 'tuyaUser', source_id: userId }
-        if (last_row_key) this.query['last_row_key'] = data.result.last_row_key
+        if (last_row_key) this.query['last_row_key'] = last_row_key
     }
 
     getRequestUrl() {
