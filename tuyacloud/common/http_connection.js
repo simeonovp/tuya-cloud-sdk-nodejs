@@ -36,9 +36,18 @@ class HttpConnection {
 
     static doFileRequest(req, stream, callback, opt={}) {
         https.get(req, response => {
-            response.pipe(stream);
+            response.pipe(stream)
+            response.on('end', () => {
+                stream.end()
+            })
             stream.on('finish', () => {
                 callback(null, stream)
+            })
+            stream.on('error', err => {
+                callback(err, null)
+            })
+            response.on('error', err => {
+              callback(err, null)
             })
         }).on('error', err => {
             callback(err, null)

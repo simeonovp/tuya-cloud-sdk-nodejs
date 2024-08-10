@@ -166,7 +166,7 @@ class RequestHandler {
                         const tcError = new TuyaCloudSDKException(error.message);
                         await callback(tcError, null);
                     } else {
-                        resolve(data)
+                      await callback(null, data)
                     }
             }, {timeout: 30000})
         }
